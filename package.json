@@ -1,0 +1,52 @@
+{
+  "name": "proc-language-support",
+  "displayName": "Pro*C/C++ Language Support",
+  "description": "Syntax highlighting, snippets, and language configuration for Oracle Pro*C/C++ embedded SQL files (.pc, .pcc).",
+  "version": "0.1.0",
+  "publisher": "proc-tools",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "proc",
+    "pro*c",
+    "oracle",
+    "embedded-sql",
+    "c",
+    "cpp",
+    "sql"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "proc",
+        "aliases": [
+          "Pro*C/C++",
+          "proc"
+        ],
+        "extensions": [
+          ".pc",
+          ".pcc"
+        ],
+        "configuration": "./language-configuration/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "proc",
+        "scopeName": "source.proc",
+        "path": "./syntaxes/proc.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "proc",
+        "path": "./snippets/proc.json"
+      }
+    ]
+  }
+}

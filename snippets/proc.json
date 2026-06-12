@@ -1,0 +1,131 @@
+{
+  "EXEC SQL SELECT INTO": {
+    "prefix": "sqlsel",
+    "body": [
+      "EXEC SQL SELECT ${1:column1, column2}",
+      "    INTO :${2:host_var1}, :${3:host_var2}",
+      "    FROM ${4:table_name}",
+      "    WHERE ${5:condition};"
+    ],
+    "description": "Pro*C: SELECT ... INTO host variables"
+  },
+  "EXEC SQL INSERT": {
+    "prefix": "sqlins",
+    "body": [
+      "EXEC SQL INSERT INTO ${1:table_name} (${2:column1, column2})",
+      "    VALUES (:${3:host_var1}, :${4:host_var2});"
+    ],
+    "description": "Pro*C: INSERT statement"
+  },
+  "EXEC SQL UPDATE": {
+    "prefix": "sqlupd",
+    "body": [
+      "EXEC SQL UPDATE ${1:table_name}",
+      "    SET ${2:column1} = :${3:host_var1}",
+      "    WHERE ${4:condition};"
+    ],
+    "description": "Pro*C: UPDATE statement"
+  },
+  "EXEC SQL DELETE": {
+    "prefix": "sqldel",
+    "body": [
+      "EXEC SQL DELETE FROM ${1:table_name}",
+      "    WHERE ${2:condition};"
+    ],
+    "description": "Pro*C: DELETE statement"
+  },
+  "EXEC SQL Cursor (full pattern)": {
+    "prefix": "sqlcursor",
+    "body": [
+      "EXEC SQL DECLARE ${1:cursor_name} CURSOR FOR",
+      "    SELECT ${2:column1, column2}",
+      "    FROM ${3:table_name}",
+      "    WHERE ${4:condition};",
+      "",
+      "EXEC SQL OPEN ${1:cursor_name};",
+      "",
+      "EXEC SQL WHENEVER NOT FOUND DO break;",
+      "for (;;) {",
+      "    EXEC SQL FETCH ${1:cursor_name}",
+      "        INTO :${5:host_var1}, :${6:host_var2};",
+      "    $0",
+      "}",
+      "",
+      "EXEC SQL CLOSE ${1:cursor_name};"
+    ],
+    "description": "Pro*C: full cursor declare/open/fetch loop/close pattern"
+  },
+  "SQLCA error check": {
+    "prefix": "sqlcheck",
+    "body": [
+      "if (sqlca.sqlcode != 0) {",
+      "    fprintf(stderr, \"SQL error %d: %.*s\\n\",",
+      "        sqlca.sqlcode,",
+      "        sqlca.sqlerrm.sqlerrml,",
+      "        sqlca.sqlerrm.sqlerrmc);",
+      "    $0",
+      "}"
+    ],
+    "description": "Pro*C: SQLCA error check"
+  },
+  "EXEC SQL WHENEVER": {
+    "prefix": "sqlwhenever",
+    "body": [
+      "EXEC SQL WHENEVER SQLERROR ${1|DO sql_error(),GOTO error_label,STOP,CONTINUE|};",
+      "EXEC SQL WHENEVER NOT FOUND ${2|DO not_found(),GOTO notfound_label,CONTINUE,STOP|};",
+      "EXEC SQL WHENEVER SQLWARNING ${3|CONTINUE,DO sql_warning(),STOP|};"
+    ],
+    "description": "Pro*C: WHENEVER directives"
+  },
+  "EXEC SQL CONNECT": {
+    "prefix": "sqlconnect",
+    "body": [
+      "EXEC SQL CONNECT :${1:username} IDENTIFIED BY :${2:password}",
+      "    USING :${3:db_string};"
+    ],
+    "description": "Pro*C: database CONNECT"
+  },
+  "EXEC SQL COMMIT": {
+    "prefix": "sqlcommit",
+    "body": [
+      "EXEC SQL COMMIT${1: WORK}${2: RELEASE};"
+    ],
+    "description": "Pro*C: COMMIT"
+  },
+  "EXEC SQL ROLLBACK": {
+    "prefix": "sqlrollback",
+    "body": [
+      "EXEC SQL ROLLBACK${1: WORK}${2: RELEASE};"
+    ],
+    "description": "Pro*C: ROLLBACK"
+  },
+  "EXEC SQL DECLARE SECTION": {
+    "prefix": "sqldecl",
+    "body": [
+      "EXEC SQL BEGIN DECLARE SECTION;",
+      "    ${1:char}    ${2:host_var}[${3:64}];",
+      "    $0",
+      "EXEC SQL END DECLARE SECTION;"
+    ],
+    "description": "Pro*C: host variable DECLARE SECTION"
+  },
+  "EXEC SQL BULK COLLECT": {
+    "prefix": "sqlbulk",
+    "body": [
+      "EXEC SQL DECLARE ${1:cursor_name} CURSOR FOR",
+      "    SELECT ${2:column1, column2}",
+      "    FROM ${3:table_name}",
+      "    WHERE ${4:condition};",
+      "",
+      "EXEC SQL OPEN ${1:cursor_name};",
+      "",
+      "EXEC SQL FOR :${5:array_size}",
+      "    FETCH ${1:cursor_name}",
+      "    BULK COLLECT INTO :${6:host_array1}, :${7:host_array2};",
+      "",
+      "EXEC SQL CLOSE ${1:cursor_name};",
+      "$0"
+    ],
+    "description": "Pro*C: BULK COLLECT cursor fetch"
+  }
+}

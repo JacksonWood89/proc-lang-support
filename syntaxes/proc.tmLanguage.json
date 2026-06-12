@@ -1,0 +1,275 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Pro*C/C++",
+  "scopeName": "source.proc",
+  "patterns": [
+    { "include": "#exec-sql" },
+    { "include": "#exec-oracle" },
+    { "include": "#c-comments" },
+    { "include": "#preprocessor" },
+    { "include": "#c-strings" },
+    { "include": "#c-keywords" },
+    { "include": "#c-types" },
+    { "include": "#numbers" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "exec-sql": {
+      "name": "meta.embedded.sql.proc",
+      "begin": "(?i)\\b(EXEC)\\s+(SQL)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.exec.proc" },
+        "2": { "name": "keyword.control.sql.proc" }
+      },
+      "end": ";",
+      "endCaptures": {
+        "0": { "name": "punctuation.terminator.statement.sql.proc" }
+      },
+      "patterns": [
+        { "include": "#sql-comments" },
+        { "include": "#sql-strings" },
+        { "include": "#host-variable" },
+        { "include": "#sql-whenever" },
+        { "include": "#sql-dynamic" },
+        { "include": "#sql-oracle-specific" },
+        { "include": "#sql-cursor" },
+        { "include": "#sql-dml" },
+        { "include": "#sql-ddl" },
+        { "include": "#sql-tcl" },
+        { "include": "#sql-connect" },
+        { "include": "#sql-functions" },
+        { "include": "#sql-types" },
+        { "include": "#sql-operators" },
+        { "include": "#numbers" }
+      ]
+    },
+    "exec-oracle": {
+      "name": "meta.embedded.exec-oracle.proc",
+      "begin": "(?i)\\b(EXEC)\\s+(ORACLE)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.exec.proc" },
+        "2": { "name": "keyword.control.oracle.proc" }
+      },
+      "end": ";",
+      "endCaptures": {
+        "0": { "name": "punctuation.terminator.statement.exec-oracle.proc" }
+      },
+      "patterns": [
+        { "include": "#sql-comments" },
+        { "include": "#sql-strings" },
+        { "include": "#host-variable" },
+        {
+          "name": "keyword.other.exec-oracle.proc",
+          "match": "(?i)\\b(OPTION|RELEASE_CURSOR|HOLD_CURSOR|NATIVE|ANSI|ISO|YES|NO)\\b"
+        },
+        { "include": "#numbers" }
+      ]
+    },
+    "host-variable": {
+      "name": "variable.other.host-variable.proc",
+      "match": "(:)\\s*([a-zA-Z_]\\w*(?:\\.[a-zA-Z_]\\w*)?)(?:\\s*(:)\\s*([a-zA-Z_]\\w*))?",
+      "captures": {
+        "1": { "name": "punctuation.definition.variable.proc" },
+        "2": { "name": "variable.other.host-variable.name.proc" },
+        "3": { "name": "punctuation.separator.indicator.proc" },
+        "4": { "name": "variable.other.host-variable.indicator.proc" }
+      }
+    },
+    "sql-comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-dash.sql.proc",
+          "match": "--.*$"
+        },
+        {
+          "name": "comment.block.sql.proc",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "sql-strings": {
+      "name": "string.quoted.single.sql.proc",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.sql.proc",
+          "match": "''"
+        }
+      ]
+    },
+    "sql-whenever": {
+      "match": "(?i)\\b(WHENEVER)\\s+(SQLERROR|NOT\\s+FOUND|SQLWARNING)\\s+(CONTINUE|STOP|DO|GOTO|GO\\s+TO)?",
+      "captures": {
+        "1": { "name": "keyword.control.whenever.sql.proc" },
+        "2": { "name": "keyword.other.condition.sql.proc" },
+        "3": { "name": "keyword.control.action.sql.proc" }
+      }
+    },
+    "sql-dynamic": {
+      "name": "keyword.other.dynamic.sql.proc",
+      "match": "(?i)\\b(PREPARE|EXECUTE\\s+IMMEDIATE|EXECUTE|DESCRIBE|USING|DECLARE\\s+STATEMENT)\\b"
+    },
+    "sql-oracle-specific": {
+      "patterns": [
+        {
+          "name": "keyword.other.oracle.sql.proc",
+          "match": "(?i)\\b(BULK\\s+COLLECT|CONNECT\\s+BY|START\\s+WITH|ORDER\\s+SIBLINGS\\s+BY|NOCYCLE|PRIOR|FORALL|FLASHBACK|PIVOT|UNPIVOT|RETURNING|REFERENCING|PARTITION\\s+BY|OVER|WITHIN\\s+GROUP|KEEP|MODEL|WITH)\\b"
+        },
+        {
+          "name": "constant.language.oracle.sql.proc",
+          "match": "(?i)\\b(ROWNUM|ROWID|LEVEL)\\b"
+        }
+      ]
+    },
+    "sql-cursor": {
+      "name": "keyword.other.cursor.sql.proc",
+      "match": "(?i)\\b(DECLARE|CURSOR|OPEN|FETCH|CLOSE|FOR|BULK|COLLECT)\\b"
+    },
+    "sql-dml": {
+      "name": "keyword.other.dml.sql.proc",
+      "match": "(?i)\\b(SELECT|INSERT|UPDATE|DELETE|MERGE|INTO|FROM|WHERE|GROUP\\s+BY|ORDER\\s+BY|HAVING|INNER\\s+JOIN|LEFT\\s+(?:OUTER\\s+)?JOIN|RIGHT\\s+(?:OUTER\\s+)?JOIN|FULL\\s+(?:OUTER\\s+)?JOIN|CROSS\\s+JOIN|NATURAL\\s+JOIN|JOIN|ON|UNION\\s+ALL|UNION|INTERSECT|EXCEPT|MINUS|VALUES|SET|AS|DISTINCT|ALL|ANY|SOME)\\b"
+    },
+    "sql-ddl": {
+      "name": "keyword.other.ddl.sql.proc",
+      "match": "(?i)\\b(CREATE|ALTER|DROP|TRUNCATE|RENAME|COMMENT|GRANT|REVOKE|TABLE|VIEW|INDEX|SEQUENCE|SYNONYM|TRIGGER|PROCEDURE|FUNCTION|PACKAGE|BODY|TYPE|DATABASE|TABLESPACE|SCHEMA|USER|ROLE|CONSTRAINT|PRIMARY\\s+KEY|FOREIGN\\s+KEY|REFERENCES|UNIQUE|CHECK|DEFAULT|CASCADE|ADD|MODIFY|COLUMN)\\b"
+    },
+    "sql-tcl": {
+      "name": "keyword.other.tcl.sql.proc",
+      "match": "(?i)\\b(COMMIT|ROLLBACK|SAVEPOINT|SET\\s+TRANSACTION|WORK|RELEASE|TO\\s+SAVEPOINT)\\b"
+    },
+    "sql-connect": {
+      "name": "keyword.other.connect.sql.proc",
+      "match": "(?i)\\b(CONNECT|IDENTIFIED\\s+BY|ALTER\\s+AUTHORIZATION|AT|IN\\s+SINGLE\\s+TASK|IN\\s+LOGON|BEGIN\\s+DECLARE\\s+SECTION|END\\s+DECLARE\\s+SECTION|BEGIN|END|INCLUDE|CONTEXT|ALLOCATE|FREE|CACHE)\\b"
+    },
+    "sql-functions": {
+      "name": "support.function.sql.proc",
+      "match": "(?i)\\b(COUNT|SUM|AVG|MIN|MAX|STDDEV|STDDEV_POP|STDDEV_SAMP|VARIANCE|VAR_POP|VAR_SAMP|MEDIAN|LISTAGG|GROUPING|GROUPING_ID|RANK|DENSE_RANK|ROW_NUMBER|NTILE|PERCENT_RANK|CUME_DIST|FIRST_VALUE|LAST_VALUE|NTH_VALUE|LAG|LEAD|RATIO_TO_REPORT|CORR|COVAR_POP|COVAR_SAMP|REGR_SLOPE|REGR_INTERCEPT|PERCENTILE_CONT|PERCENTILE_DISC|SUBSTR|SUBSTRB|INSTR|INSTRB|LENGTH|LENGTHB|LOWER|UPPER|INITCAP|LPAD|RPAD|LTRIM|RTRIM|TRIM|REPLACE|TRANSLATE|CONCAT|ASCII|ASCIISTR|CHR|SOUNDEX|REGEXP_SUBSTR|REGEXP_REPLACE|REGEXP_INSTR|REGEXP_COUNT|REGEXP_LIKE|SYSDATE|SYSTIMESTAMP|CURRENT_DATE|CURRENT_TIMESTAMP|LOCALTIMESTAMP|ADD_MONTHS|MONTHS_BETWEEN|NEXT_DAY|LAST_DAY|EXTRACT|NEW_TIME|SESSIONTIMEZONE|DBTIMEZONE|TZ_OFFSET|FROM_TZ|NUMTODSINTERVAL|NUMTOYMINTERVAL|TO_CHAR|TO_NUMBER|TO_DATE|TO_TIMESTAMP|TO_TIMESTAMP_TZ|TO_DSINTERVAL|TO_YMINTERVAL|TO_CLOB|TO_NCLOB|TO_BLOB|TO_LOB|TO_SINGLE_BYTE|TO_MULTI_BYTE|CAST|CONVERT|HEXTORAW|RAWTOHEX|BIN_TO_NUM|CHARTOROWID|ROWIDTOCHAR|UNISTR|NVL|NVL2|NULLIF|COALESCE|DECODE|GREATEST|LEAST|LNNVL|NANVL|ABS|CEIL|FLOOR|ROUND|TRUNC|MOD|REMAINDER|POWER|SQRT|EXP|LN|LOG|SIGN|SIN|COS|TAN|ASIN|ACOS|ATAN|ATAN2|SINH|COSH|TANH|WIDTH_BUCKET|BITAND|DUMP|VSIZE|USER|UID|SYS_GUID|SYS_CONTEXT|USERENV|EMPTY_CLOB|EMPTY_BLOB)\\b"
+    },
+    "sql-types": {
+      "name": "storage.type.sql.proc",
+      "match": "(?i)\\b(VARCHAR2|NVARCHAR2|VARCHAR|NCHAR|CHAR|CHARACTER|NUMBER|NUMERIC|DECIMAL|DEC|INTEGER|INT|SMALLINT|FLOAT|REAL|DOUBLE\\s+PRECISION|BINARY_FLOAT|BINARY_DOUBLE|DATE|TIMESTAMP|INTERVAL\\s+YEAR|INTERVAL\\s+DAY|INTERVAL|RAW|LONG\\s+RAW|LONG|UROWID|CLOB|NCLOB|BLOB|BFILE|XMLTYPE|BOOLEAN|PLS_INTEGER|BINARY_INTEGER|NATURALN|NATURAL|POSITIVEN|POSITIVE|SIGNTYPE|SIMPLE_INTEGER|SIMPLE_FLOAT|SIMPLE_DOUBLE|REF|ANYDATA|ANYTYPE|ANYDATASET|SDO_GEOMETRY|ORDIMAGE|ORDAUDIO|ORDVIDEO|ORDDOC|URITYPE|HTTPURITYPE|DBURITYPE|XDBURITYPE|RECORD|VARRAY|NESTED\\s+TABLE|MLSLABEL|YEAR|MONTH|DAY|HOUR|MINUTE|SECOND|ZONE|WITH\\s+TIME\\s+ZONE|WITH\\s+LOCAL\\s+TIME\\s+ZONE)\\b"
+    },
+    "sql-operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.sql.proc",
+          "match": "(?i)\\b(AND|OR|NOT|IN|EXISTS|BETWEEN|LIKE|ESCAPE|IS|NULL|CASE|WHEN|THEN|ELSE|END|ASC|DESC|NULLS\\s+FIRST|NULLS\\s+LAST|FIRST|LAST)\\b"
+        },
+        {
+          "name": "keyword.operator.comparison.sql.proc",
+          "match": "(<=|>=|<>|!=|\\|\\||=|<|>|\\+|-|\\*|/)"
+        }
+      ]
+    },
+    "c-comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.c.proc",
+          "begin": "//",
+          "end": "(?<!\\\\)$"
+        },
+        {
+          "name": "comment.block.c.proc",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "preprocessor": {
+      "patterns": [
+        {
+          "name": "meta.preprocessor.include.proc",
+          "begin": "^\\s*(#\\s*(?:include|import))\\b",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.directive.include.proc" }
+          },
+          "end": "(?=//)|(?=/\\*)|(?<!\\\\)$",
+          "patterns": [
+            {
+              "name": "string.quoted.other.lt-gt.include.proc",
+              "begin": "<",
+              "end": ">"
+            },
+            { "include": "#c-strings" }
+          ]
+        },
+        {
+          "name": "keyword.control.directive.proc",
+          "match": "^\\s*(#\\s*(?:define|undef|ifdef|ifndef|if|elif|else|endif|pragma|error|warning|line))\\b"
+        }
+      ]
+    },
+    "c-strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.c.proc",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.c.proc",
+              "match": "\\\\(?:[abfnrtv\\\\'\"?]|[0-7]{1,3}|x[0-9A-Fa-f]+|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.char.c.proc",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.c.proc",
+              "match": "\\\\(?:[abfnrtv\\\\'\"?]|[0-7]{1,3}|x[0-9A-Fa-f]+|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})"
+            }
+          ]
+        }
+      ]
+    },
+    "c-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.c.proc",
+          "match": "\\b(if|else|for|while|do|switch|case|break|continue|return|goto|default|try|catch|throw)\\b"
+        },
+        {
+          "name": "keyword.operator.sizeof.c.proc",
+          "match": "\\b(sizeof)\\b"
+        },
+        {
+          "name": "storage.modifier.c.proc",
+          "match": "\\b(static|extern|inline|register|volatile|const|auto|restrict|typedef|virtual|explicit|friend|public|private|protected|mutable|constexpr)\\b"
+        },
+        {
+          "name": "keyword.other.c.proc",
+          "match": "\\b(struct|union|enum|namespace|class|template|typename|using|new|delete|this|operator|asm|__asm__)\\b"
+        }
+      ]
+    },
+    "c-types": {
+      "name": "storage.type.c.proc",
+      "match": "\\b(void|char|int|short|long|float|double|unsigned|signed|_Bool|bool|wchar_t|size_t|ssize_t|ptrdiff_t|FILE|SQLCA|SQLDA|VARCHAR|ub1|ub2|ub4|sb1|sb2|sb4|sword|uword|eword|dvoid|text|boolean|OCIEnv|OCIError|OCISvcCtx|OCIStmt|OCIBind|OCIDefine|OCINumber|OCIDate|OCIString|OCIRaw|OCILobLocator)\\b"
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.proc",
+          "match": "\\b0[xX][0-9A-Fa-f]+[uUlL]*\\b"
+        },
+        {
+          "name": "constant.numeric.octal.proc",
+          "match": "\\b0[0-7]+[uUlL]*\\b"
+        },
+        {
+          "name": "constant.numeric.float.proc",
+          "match": "(?:\\b\\d+\\.\\d*|\\.\\d+|\\b\\d+)(?:[eE][-+]?\\d+)?[fFlL]?\\b"
+        }
+      ]
+    },
+    "operators": {
+      "name": "keyword.operator.c.proc",
+      "match": "(\\+\\+|--|->|<<=|>>=|<<|>>|<=|>=|==|!=|&&|\\|\\||\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|[-+*/%=<>!&|^~?:.])"
+    }
+  }
+}
