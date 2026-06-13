@@ -1,0 +1,14 @@
+# Files and folders excluded from the packaged .vsix
+
+.vscode/**
+.git/**
+.gitignore
+.vscodeignore
+
+# Source-control / dev noise
+**/.DS_Store
+**/Thumbs.db
+
+# Keep the package lean — these aren't needed at runtime
+# (README.md, CHANGELOG.md, and LICENSE are intentionally NOT ignored;
+#  the Marketplace uses them.)

@@ -5,6 +5,18 @@
   "version": "0.1.0",
   "publisher": "proc-tools",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CHANGE-ME/proc-lang-support.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CHANGE-ME/proc-lang-support/issues"
+  },
+  "homepage": "https://github.com/CHANGE-ME/proc-lang-support#readme",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },

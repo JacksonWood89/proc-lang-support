@@ -1,0 +1,13 @@
+# Packaged extension artifacts
+*.vsix
+
+# Local test/example files
+examples/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
