@@ -3,7 +3,7 @@
   "displayName": "Pro*C/C++ Language Support",
   "description": "Syntax highlighting, snippets, and language configuration for Oracle Pro*C/C++ embedded SQL files (.pc, .pcc).",
   "version": "0.1.0",
-  "publisher": "proc-tools",
+  "publisher": "JacksonWood89",
   "license": "MIT",
   "repository": {
     "type": "git",
